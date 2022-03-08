@@ -4,16 +4,21 @@ spring:
   application:
     name: spring-demo
   kafka:
-      producer:
-        bootstrap-servers: localhost:29092
-        key-serializer: org.apache.kafka.common.serialization.StringSerializer
-        value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
-        client-id: spring-demo-local
-      consumer:
-        bootstrap-servers: localhost:29092
-        group-id: spring-demo-local
-        auto-offset-reset: earliest
-        key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-        value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
-        properties:
-          spring.json.trusted.packages: "eu.henok.springdemo.dto"
+    producer:
+      bootstrap-servers: localhost:29092
+      key-serializer: org.apache.kafka.common.serialization.UUIDSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      client-id: spring-demo-local
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: spring-demo-local
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.UUIDDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: "eu.henok.springdemo.dto"
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:15432/demo
+    username: demo
+    password: secret

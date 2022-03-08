@@ -1,3 +1,5 @@
 package eu.henok.springdemo.dto;
 
-public record Message(String id, String value) {}
+import java.util.UUID;
+
+public record Message(UUID id, String value) {}
