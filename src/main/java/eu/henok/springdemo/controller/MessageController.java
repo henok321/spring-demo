@@ -1,6 +1,6 @@
 package eu.henok.springdemo.controller;
 
-import eu.henok.springdemo.dto.Message;
+import eu.henok.springdemo.dto.MessageCreatedOrUpdated;
 import eu.henok.springdemo.messaging.KafkaProducer;
 import eu.henok.springdemo.repository.MessageRepository;
 import java.net.URI;
@@ -24,7 +24,7 @@ public class MessageController {
 
   @PostMapping("message")
   @ResponseStatus(HttpStatus.CREATED)
-  public ResponseEntity createMessage(@RequestBody final Message message) {
+  public ResponseEntity createMessage(@RequestBody final MessageCreatedOrUpdated message) {
     kafkaProducer.publishMessageCreatedOrUpdated(message);
     return ResponseEntity.created(URI.create("message/%s".formatted(message.id()))).build();
   }
@@ -32,18 +32,24 @@ public class MessageController {
   @PutMapping("message/{messageId}")
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity updateMessage(
-      @RequestBody final Message message, @PathVariable final String messageId) {
+      @RequestBody final MessageCreatedOrUpdated message, @PathVariable final String messageId) {
     kafkaProducer.publishMessageCreatedOrUpdated(message);
     return ResponseEntity.created(URI.create("message/%s".formatted(messageId))).build();
   }
 
   @GetMapping("message/{messageId}")
-  public ResponseEntity<Message> getMessage(@PathVariable final UUID messageId) {
+  public ResponseEntity<MessageCreatedOrUpdated> getMessage(@PathVariable final UUID messageId) {
     return ResponseEntity.of(messageRepository.findMessageById(messageId));
   }
 
   @GetMapping("message")
-  public List<Message> getMessage() {
+  public List<MessageCreatedOrUpdated> getMessage() {
     return messageRepository.getAllMessages();
+  }
+
+  @DeleteMapping("message/{messageId}")
+  @ResponseStatus(HttpStatus.NO_CONTENT)
+  public void deleteMessage(@PathVariable final UUID messageId) {
+    kafkaProducer.publishMessageDeleted(messageId);
   }
 }

@@ -1,6 +1,7 @@
 package eu.henok.springdemo.messaging;
 
-import eu.henok.springdemo.dto.Message;
+import eu.henok.springdemo.dto.MessageCreatedOrUpdated;
+import eu.henok.springdemo.dto.MessageDeleted;
 import eu.henok.springdemo.repository.MessageRepository;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -11,6 +12,7 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.stereotype.Component;
 
 @Component
+@KafkaListener(topics = "message-topic")
 public class KafkaConsumer {
 
   private final MessageRepository messageRepository;
@@ -21,17 +23,23 @@ public class KafkaConsumer {
     this.messageRepository = messageRepository;
   }
 
-  @KafkaListener(topics = "message-created-or-updated")
   @KafkaHandler
-  public void handleMessage(@Payload final Message message) {
-    LOGGER.info(message.toString());
+  public void handleMessageCreatedOrUpdated(@Payload final MessageCreatedOrUpdated message) {
+    LOGGER.info("handle create or update for message {}", message.toString());
 
-    final Optional<Message> maybeMessage = messageRepository.findMessageById(message.id());
+    final Optional<MessageCreatedOrUpdated> maybeMessage =
+        messageRepository.findMessageById(message.id());
 
     if (maybeMessage.isEmpty()) {
       messageRepository.insertMessage(message);
     } else {
       messageRepository.updateMessage(message);
     }
+  }
+
+  @KafkaHandler
+  public void handleMessageDelete(@Payload final MessageDeleted messageDeleted) {
+    LOGGER.info("handle delete for message {}", messageDeleted.toString());
+    messageRepository.deleteMessage(messageDeleted.id());
   }
 }
