@@ -42,4 +42,9 @@ public class KafkaConsumer {
     LOGGER.info("handle delete for message {}", messageDeleted.toString());
     messageRepository.deleteMessage(messageDeleted.id());
   }
+
+  @KafkaHandler
+  public void handleDefault(@Payload final Object event) {
+    LOGGER.warn("Cannot handle unknown event {}", event);
+  }
 }
