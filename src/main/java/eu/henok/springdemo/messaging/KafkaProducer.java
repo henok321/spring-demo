@@ -14,7 +14,7 @@ public class KafkaProducer {
     this.kafkaTemplate = kafkaTemplate;
   }
 
-  public void publishMessage(final Message message) {
-    this.kafkaTemplate.send("demo-topic", message.id(), message);
+  public void publishMessageCreatedOrUpdated(final Message message) {
+    this.kafkaTemplate.send("message-created-or-updated", message.id(), message);
   }
 }
