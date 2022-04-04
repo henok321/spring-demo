@@ -23,12 +23,13 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
   db:
-    image: postgres:latest
+    image: mariadb:lates
     ports:
-      - "15432:5432"
+      - "13306:3306"
     environment:
-      POSTGRES_USER: demo
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: demo
+      MARIADB_ROOT_PASSWORD: supersecret
+      MARIADB_DATABASE: demo
+      MARIADB_USER: demo
+      MARIADB_PASSWORD: secret
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d

@@ -5,12 +5,12 @@ spring:
     name: spring-demo
   kafka:
     producer:
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: localhost:19092
       key-serializer: org.apache.kafka.common.serialization.UUIDSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       client-id: spring-demo-local
     consumer:
-      bootstrap-servers: localhost:29092
+      bootstrap-servers: localhost:19092
       group-id: spring-demo-local
       auto-offset-reset: earliest
       key-deserializer: org.apache.kafka.common.serialization.UUIDDeserializer
@@ -19,7 +19,7 @@ spring:
         spring.json.trusted.packages: "eu.henok.springdemo.dto"
 
   datasource:
-    driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://localhost:15432/demo
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://localhost:13306/demo
     username: demo
     password: secret
