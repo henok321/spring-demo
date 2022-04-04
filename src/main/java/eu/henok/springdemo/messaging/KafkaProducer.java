@@ -1,20 +1,19 @@
 package eu.henok.springdemo.messaging;
 
-import eu.henok.springdemo.dto.MessageCreatedOrUpdated;
-import eu.henok.springdemo.dto.MessageDeleted;
-import java.util.UUID;
+import eu.henok.springdemo.event.MessageCreatedOrUpdated;
+import eu.henok.springdemo.event.MessageDeleted;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
 
 @Component
 public class KafkaProducer {
 
-  private final KafkaTemplate<UUID, MessageCreatedOrUpdated> messageKafkaTemplate;
-  private final KafkaTemplate<UUID, MessageDeleted> messageDeletedKafkaTemplate;
+  private final KafkaTemplate<Long, MessageCreatedOrUpdated> messageKafkaTemplate;
+  private final KafkaTemplate<Long, MessageDeleted> messageDeletedKafkaTemplate;
 
   public KafkaProducer(
-      final KafkaTemplate<UUID, MessageCreatedOrUpdated> messageKafkaTemplate,
-      final KafkaTemplate<UUID, MessageDeleted> messageDeletedKafkaTemplate) {
+      final KafkaTemplate<Long, MessageCreatedOrUpdated> messageKafkaTemplate,
+      final KafkaTemplate<Long, MessageDeleted> messageDeletedKafkaTemplate) {
     this.messageKafkaTemplate = messageKafkaTemplate;
     this.messageDeletedKafkaTemplate = messageDeletedKafkaTemplate;
   }
@@ -23,7 +22,7 @@ public class KafkaProducer {
     this.messageKafkaTemplate.send("message-topic", message.id(), message);
   }
 
-  public void publishMessageDeleted(final UUID messageId) {
+  public void publishMessageDeleted(final Long messageId) {
     this.messageDeletedKafkaTemplate.send(
         "message-topic", messageId, new MessageDeleted(messageId));
   }
