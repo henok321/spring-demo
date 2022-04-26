@@ -1,4 +1,4 @@
-package eu.henok.springdemo.messaging;
+package eu.henok.springdemo.messaging.kafka;
 
 import eu.henok.springdemo.event.MessageCreatedOrUpdated;
 import eu.henok.springdemo.event.MessageDeleted;

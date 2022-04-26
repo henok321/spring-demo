@@ -1,7 +1,8 @@
 package eu.henok.springdemo.controller;
 
 import eu.henok.springdemo.event.MessageCreatedOrUpdated;
-import eu.henok.springdemo.messaging.KafkaProducer;
+import eu.henok.springdemo.messaging.amqp.AmqpProducer;
+import eu.henok.springdemo.messaging.kafka.KafkaProducer;
 import eu.henok.springdemo.repository.Message;
 import eu.henok.springdemo.repository.MessageRepository;
 import java.net.URI;
@@ -14,11 +15,15 @@ import org.springframework.web.bind.annotation.*;
 public class MessageController {
 
   private final KafkaProducer kafkaProducer;
+  private final AmqpProducer amqpProducer;
   private final MessageRepository messageRepository;
 
   public MessageController(
-      final KafkaProducer kafkaProducer, final MessageRepository messageRepository) {
+      final KafkaProducer kafkaProducer,
+      final AmqpProducer amqpProducer,
+      final MessageRepository messageRepository) {
     this.kafkaProducer = kafkaProducer;
+    this.amqpProducer = amqpProducer;
     this.messageRepository = messageRepository;
   }
 
@@ -26,6 +31,7 @@ public class MessageController {
   @ResponseStatus(HttpStatus.CREATED)
   public ResponseEntity createMessage(@RequestBody final MessageCreatedOrUpdated message) {
     kafkaProducer.publishMessageCreatedOrUpdated(message);
+    amqpProducer.sendMessage(message);
     return ResponseEntity.created(URI.create("message/%s".formatted(message.id()))).build();
   }
 
@@ -34,6 +40,7 @@ public class MessageController {
   public ResponseEntity updateMessage(
       @RequestBody final MessageCreatedOrUpdated message, @PathVariable final Long messageId) {
     kafkaProducer.publishMessageCreatedOrUpdated(message);
+    amqpProducer.sendMessage(message);
     return ResponseEntity.created(URI.create("message/%s".formatted(messageId))).build();
   }
 

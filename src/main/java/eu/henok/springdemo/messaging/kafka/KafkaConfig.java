@@ -1,4 +1,4 @@
-package eu.henok.springdemo.messaging;
+package eu.henok.springdemo.messaging.kafka;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -23,7 +23,7 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true
   db:
-    image: mariadb:lates
+    image: mariadb:latest
     ports:
       - "13306:3306"
     environment:
@@ -33,3 +33,12 @@ services:
       MARIADB_PASSWORD: secret
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d
+  rabbitmq3:
+    container_name: "rabbitmq"
+    image: rabbitmq:3-management-alpine
+    environment:
+      - RABBITMQ_DEFAULT_USER=demo
+      - RABBITMQ_DEFAULT_PASS=secret
+    ports:
+      - '5672:5672'
+      - '15672:15672'
