@@ -67,7 +67,7 @@
             <plugin>
                 <groupId>com.cosium.code</groupId>
                 <artifactId>git-code-format-maven-plugin</artifactId>
-                <version>3.3</version>
+                <version>5.3</version>
                 <executions>
                     <execution>
                         <id>install-formatter-hook</id>
