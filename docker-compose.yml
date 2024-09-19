@@ -35,7 +35,7 @@ services:
       - ./init-scripts:/docker-entrypoint-initdb.d
   rabbitmq3:
     container_name: "rabbitmq"
-    image: rabbitmq:3-management-alpine
+    image: rabbitmq:4-management-alpine
     environment:
       - RABBITMQ_DEFAULT_USER=demo
       - RABBITMQ_DEFAULT_PASS=secret
